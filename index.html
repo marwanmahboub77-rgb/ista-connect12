@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISTA Connect FINAL+</title>
+
+<style>
+
+/* ===== ROOT ===== */
+:root{
+--main:#4f46e5;
+--sec:#06b6d4;
+--bg:#eef2ff;
+--card:#ffffff;
+--text:#111;
+}
+
+.dark{
+--bg:#0f172a;
+--card:#1e293b;
+--text:#fff;
+}
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#eef2ff,#e0f2fe);
+color:var(--text);
+}
+
+/* ===== LOGIN ===== */
+.login{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+.login-box{
+background:rgba(255,255,255,0.2);
+backdrop-filter:blur(20px);
+padding:40px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+}
+input, textarea{
+padding:12px;
+margin:10px;
+width:230px;
+border:none;
+border-radius:10px;
+}
+
+button{
+padding:10px 15px;
+background:linear-gradient(135deg,var(--main),var(--sec));
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* ===== NAV ===== */
+.navbar{
+background:linear-gradient(135deg,var(--main),var(--sec));
+color:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+}
+
+.sidebar{
+position:fixed;
+left:-260px;
+top:0;
+width:260px;
+height:100%;
+background:#111;
+transition:0.4s;
+}
+.sidebar a{
+color:white;
+display:block;
+padding:15px;
+}
+.sidebar a:hover{background:#333;}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+display:none;
+}
+
+.section{display:none;}
+.section.active{display:block;}
+
+.box{
+background:var(--card);
+margin:20px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* ===== ACCUEIL ===== */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+.stat{
+padding:20px;
+border-radius:15px;
+color:white;
+text-align:center;
+}
+.s1{background:linear-gradient(135deg,#6366f1,#8b5cf6);}
+.s2{background:linear-gradient(135deg,#10b981,#22c55e);}
+.s3{background:linear-gradient(135deg,#f59e0b,#f97316);}
+.s4{background:linear-gradient(135deg,#ef4444,#dc2626);}
+
+/* ===== FILIERES ===== */
+.filiere-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:15px;
+}
+.filiere-card{
+padding:20px;
+border-radius:15px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+text-align:center;
+transition:0.3s;
+}
+.filiere-card:hover{transform:scale(1.08);}
+
+.dev{background:linear-gradient(135deg,#6366f1,#8b5cf6);}
+.reseau{background:linear-gradient(135deg,#0ea5e9,#06b6d4);}
+.gestion{background:linear-gradient(135deg,#10b981,#22c55e);}
+.commerce{background:linear-gradient(135deg,#f59e0b,#f97316);}
+.industrie{background:linear-gradient(135deg,#64748b,#334155);}
+.electric{background:linear-gradient(135deg,#eab308,#facc15);}
+.meca{background:linear-gradient(135deg,#ef4444,#dc2626);}
+.hotel{background:linear-gradient(135deg,#ec4899,#f472b6);}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:10px;margin-top:15px;}
+.tab-btn{padding:10px;border:none;border-radius:20px;background:#ddd;}
+.tab-btn.active{background:var(--main);color:white;}
+.tab-content{margin-top:15px;padding:15px;border-radius:15px;background:#eee;}
+
+.link-btn{
+display:inline-block;
+margin:5px;
+padding:8px;
+background:white;
+border-radius:10px;
+text-decoration:none;
+}
+
+/* ===== TABLE ===== */
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #ddd;padding:10px;}
+th{background:var(--main);color:white;}
+
+/* ===== TOAST ===== */
+.toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:var(--main);
+color:white;
+padding:10px 20px;
+border-radius:10px;
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginPage">
+<div class="login-box">
+<h2>🔐 ISTA Connect</h2>
+<input id="user" placeholder="Nom">
+<input id="pass" type="password" placeholder="Code">
+<button onclick="login()">Entrer</button>
+<p id="error"></p>
+</div>
+</div>
+
+<!-- SITE -->
+<div id="sitePage" style="display:none;">
+
+<div class="navbar">
+<span onclick="toggleMenu()">☰</span>
+<span>ISTA Connect</span>
+<button onclick="toggleDark()">🌙</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="sidebar" id="sidebar">
+<a onclick="show('home')">🏠 Accueil</a>
+<a onclick="show('filiere')">🎓 Filière</a>
+<a onclick="show('doc')">📄 Documents</a>
+<a onclick="show('contact')">📞 Contact</a>
+</div>
+
+<!-- ACCUEIL -->
+<div class="section active" id="home">
+<div class="box">
+<h2>👋 Bienvenue</h2>
+<p>Plateforme intelligente pour les stagiaires OFPPT</p>
+
+<div class="cards">
+<div class="stat s1">🎓 8 Filières</div>
+<div class="stat s2">📚 +100 Cours</div>
+<div class="stat s3">🎥 Vidéos</div>
+<div class="stat s4">📅 Emploi du temps</div>
+</div>
+
+</div>
+</div>
+
+<!-- FILIERE -->
+<div class="section" id="filiere">
+<div class="box">
+
+<h2>🎓 Filières</h2>
+
+<div class="filiere-grid">
+<div class="filiere-card dev" onclick="showF('Développement')">Dev</div>
+<div class="filiere-card reseau" onclick="showF('Réseaux')">Réseaux</div>
+<div class="filiere-card gestion" onclick="showF('Gestion')">Gestion</div>
+<div class="filiere-card commerce" onclick="showF('Commerce')">Commerce</div>
+<div class="filiere-card industrie" onclick="showF('Industrie')">Industrie</div>
+<div class="filiere-card electric" onclick="showF('Électricité')">Électricité</div>
+<div class="filiere-card meca" onclick="showF('Mécanique')">Mécanique</div>
+<div class="filiere-card hotel" onclick="showF('Hôtellerie')">Hôtellerie</div>
+</div>
+
+<div id="details"></div>
+
+<h3>📅 Emploi du temps</h3>
+<select onchange="emploi()">
+<option>G1</option>
+<option>G2</option>
+</select>
+
+<div id="edt"></div>
+
+</div>
+</div>
+
+<!-- DOCUMENT -->
+<div class="section" id="doc">
+<div class="box">
+<h2>📄 Demande de documents</h2>
+
+<input placeholder="Nom complet">
+<input placeholder="Numéro stagiaire">
+<textarea placeholder="Type de document"></textarea>
+
+<button onclick="toastMsg('Demande envoyée avec succès')">Envoyer</button>
+
+</div>
+</div>
+
+<!-- CONTACT -->
+<div class="section" id="contact">
+<div class="box">
+<h2>📞 Contact</h2>
+
+<p>WhatsApp:</p>
+<a href="https://wa.me/212634442006">Clique ici</a>
+
+<p>Facebook:</p>
+<a href="https://www.facebook.com/profile.php?id=100090503596194">Voir profil</a>
+
+<p>Email:</p>
+<input placeholder="Votre message">
+<button onclick="toastMsg('Message envoyé')">Envoyer</button>
+
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+
+function login(){
+if(user.value==="ista" && pass.value==="1234"){
+loginPage.style.display="none";
+sitePage.style.display="block";
+}else{
+error.innerText="❌ Incorrect";
+}
+}
+
+function toggleMenu(){
+sidebar.style.left=(sidebar.style.left==="0px")?"-260px":"0px";
+overlay.style.display=overlay.style.display==="block"?"none":"block";
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+}
+
+function show(id){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+toggleMenu();
+}
+
+function showF(f){
+details.innerHTML=`
+<div class="card" style="background:linear-gradient(135deg,#4f46e5,#06b6d4);color:white;">
+
+<h2>${f}</h2>
+
+<div class="tabs">
+<button class="tab-btn active" onclick="openTab(event,'cours')">Cours</button>
+<button class="tab-btn" onclick="openTab(event,'videos')">Vidéos</button>
+<button class="tab-btn" onclick="openTab(event,'pdf')">PDF</button>
+</div>
+
+<div id="cours" class="tab-content">
+<a class="link-btn" href="https://www.w3schools.com">Cours</a>
+<a class="link-btn" href="https://developer.mozilla.org">Docs</a>
+</div>
+
+<div id="videos" class="tab-content" style="display:none;">
+<a class="link-btn" href="https://youtube.com">YouTube</a>
+</div>
+
+<div id="pdf" class="tab-content" style="display:none;">
+<a class="link-btn" href="https://pdfdrive.com">PDF</a>
+</div>
+
+</div>`;
+}
+
+function openTab(e,tab){
+document.querySelectorAll(".tab-content").forEach(t=>t.style.display="none");
+document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+document.getElementById(tab).style.display="block";
+e.target.classList.add("active");
+}
+
+function emploi(){
+edt.innerHTML=`
+<table>
+<tr><th>Jour</th><th>Matin</th><th>Aprem</th></tr>
+<tr><td>Lundi</td><td>Cours</td><td>TP</td></tr>
+<tr><td>Mardi</td><td>TP</td><td>Cours</td></tr>
+<tr><td>Mercredi</td><td>Cours</td><td>Libre</td></tr>
+<tr><td>Jeudi</td><td>TP</td><td>Cours</td></tr>
+<tr><td>Vendredi</td><td>Projet</td><td>Révision</td></tr>
+</table>`;
+}
+
+function toastMsg(msg){
+toast.innerText=msg;
+toast.style.display="block";
+setTimeout(()=>toast.style.display="none",2000);
+}
+
+</script>
+
+</body>
+</html>
