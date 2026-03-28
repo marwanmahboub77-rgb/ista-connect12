@@ -1,15 +1,22 @@
 {
-"name": "ISTA Connect",
-"short_name": "ISTA",
-"start_url": "/ista-connect12/",
-"display": "standalone",
-"background_color": "#4f46e5",
-"theme_color": "#4f46e5",
-"icons": [
-{
-"src": "logo.png",
-"sizes": "192x192",
-"type": "image/png"
-}
-]
+  "name": "ISTA Connect",
+  "short_name": "ISTA",
+  "description": "Plateforme intelligente pour les stagiaires OFPPT avec cours, emplois du temps et ressources utiles",
+  "start_url": "/ista-connect12/",
+  "display": "standalone",
+  "background_color": "#4f46e5",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
